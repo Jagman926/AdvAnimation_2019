@@ -31,17 +31,16 @@ namespace Managers
         public float keyframeTime;
         public int currentFrame;
         public float recordDuration;
-        public float currentPlaybackTime;
 
         [Header("Playback Variables")]
         public bool playback;
         private bool inPlayback;
+        public PB_Direction playbackDirection;
 
         void Start()
         {
             // Init starting variables
             currentFrame = 0;
-            currentPlaybackTime = 0.0f;
             keyframeTime = 0.0f;
             // Init Objects to record
             GetObjectsToRecord();
@@ -49,30 +48,38 @@ namespace Managers
 
         void FixedUpdate()
         {
+            UpdateCurrentFrame();
+            // If recording
             if (record)
             {
-                // Update keyframe time
-                keyframeTime += Time.fixedDeltaTime;
+                if (keyframeTime > keyframeStep)
+                    RecordFrames();
             }
-            if (record && keyframeTime > keyframeStep)
+            // If playback
+            else if (playback)
             {
-                recordDuration = Time.fixedTime;
-                RecordFrames();
-            }
-            else if (!record && playback)
-            {
-                currentPlaybackTime += Time.fixedDeltaTime;
-                if (currentPlaybackTime > recordDuration)
-                    currentPlaybackTime = 0.0f;
-                UpdateCurrentFrame();
                 PlaybackFrames();
             }
-            else
+        }
+
+        void UpdateCurrentFrame()
+        {
+            // Update keyframe time
+            if (record)
             {
-                foreach (GameObject obj in objectToRecord)
-                {
-                    obj.GetComponent<Rigidbody>().isKinematic = false;
-                }
+                keyframeTime += Time.fixedDeltaTime;
+            }
+            if (playback)
+                keyframeTime += (float)playbackDirection * Time.fixedDeltaTime;
+            // Update to next keyframe
+            if (keyframeTime > keyframeStep || keyframeTime <= 0.0f)
+            {
+                currentFrame += 1 * (int)playbackDirection;
+                // Reset Keyframe time
+                if(playbackDirection == PB_Direction.FORWARD)
+                    keyframeTime = 0.0f;
+                else if(playbackDirection == PB_Direction.REVERSE)
+                    keyframeTime = keyframeStep;
             }
         }
 
@@ -99,6 +106,8 @@ namespace Managers
             }
             // Reset keyframeTime
             keyframeTime = 0.0f;
+            // Set record duration
+            recordDuration = Time.fixedTime;
         }
 
         void PlaybackFrames()
@@ -110,9 +119,11 @@ namespace Managers
                     obj.GetComponent<Rigidbody>().isKinematic = false;
                 }
                 inPlayback = true;
+                playbackDirection = PB_Direction.FORWARD;
+                currentFrame = 0;
             }
 
-            if (currentFrame < transformsList[0].positionsList.Count)
+            if (currentFrame < transformsList[0].positionsList.Count && currentFrame >= 0)
             {
                 for (int i = 0; i < objectToRecord.Length; i++)
                 {
@@ -121,11 +132,21 @@ namespace Managers
                     objectToRecord[i].transform.rotation = transformsList[i].rotationsList[currentFrame];
                 }
             }
-        }
-
-        void UpdateCurrentFrame()
-        {
-            currentFrame = Mathf.RoundToInt(currentPlaybackTime / keyframeStep);
+            else
+            {
+                // Reverse playback direction
+                if (playbackDirection == PB_Direction.FORWARD)
+                {
+                    playbackDirection = PB_Direction.REVERSE;
+                    keyframeTime = recordDuration;
+                }
+                else if (playbackDirection == PB_Direction.REVERSE)
+                {
+                    playbackDirection = PB_Direction.FORWARD;
+                    keyframeTime = 0.0f;
+                    currentFrame = 0;
+                }
+            }
         }
     }
 }
