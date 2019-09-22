@@ -5,8 +5,7 @@ using UnityEngine;
 public class s_Bomb : MonoBehaviour
 {
     [Header("Explosion Variables")]
-    [SerializeField]
-    private bool explode;
+    public bool explode;
     [SerializeField]
     private float radius;
     [SerializeField]
