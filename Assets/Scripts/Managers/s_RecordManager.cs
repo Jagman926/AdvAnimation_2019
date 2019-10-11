@@ -56,9 +56,6 @@ namespace Managers
 
         void FixedUpdate()
         {
-            // Debug Test
-            Debug.Log("Current:" + currentFrame);
-            Debug.Log("Total - 1:" + totalFrames);
             // If recording
             if (record)
             {
@@ -314,6 +311,12 @@ namespace Managers
             keyframeTime = 0.0f;
             // Set current frame to start
             currentFrame = 0;
+        }
+
+        private void OnApplicationQuit()
+        {
+            // Save File
+            s_DataManager.Instance.WriteSWATFile("TestOutput", transformsList);
         }
     }
 }
