@@ -78,6 +78,8 @@ namespace Managers
 
         public void Play_Pause()
         {
+            // Update scrubber max value
+            UpdateScrubberMax();
             // If currently playing, pause
             // If currently paused, continue last play direction
             if (play_pause_image.sprite == pause_sprite)

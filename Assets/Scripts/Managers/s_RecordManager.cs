@@ -41,6 +41,11 @@ namespace Managers
         public PB_Direction playbackDirection;
         public PB_Direction previousPlaybackDirection;
 
+        [Header("Playback File")]
+        public bool playbackFromFile;
+        [SerializeField]
+        private string playbackFileName;
+
         void Start()
         {
             // Init starting variables
@@ -180,8 +185,8 @@ namespace Managers
             }
             else if (playbackDirection == PB_Direction.REVERSE && currentFrame == totalFrames)
             {
-                    // Play in reverse to previous frame
-                    currentFrame -= 1;
+                // Play in reverse to previous frame
+                currentFrame -= 1;
             }
             // middle frames
             else if (currentFrame < totalFrames && currentFrame >= 0)
@@ -217,16 +222,30 @@ namespace Managers
         {
             // Get all objects with "Record" tag
             objectToRecord = GameObject.FindGameObjectsWithTag("Record");
-            // Init List
-            transformsList = new List<TransformRecording>();
-            // For each object init new TransformRecording struct with transform and rotation lists
-            for (int i = 0; i < objectToRecord.Length; i++)
+            // Check if playback is from file
+            if (playbackFromFile)
             {
-                TransformRecording tempRecord;
-                tempRecord.positionsList = new List<Vector3>();
-                tempRecord.rotationsList = new List<Quaternion>();
-                transformsList.Add(tempRecord);
+                LoadFileInformation();
             }
+            // If not, init List
+            else
+            {
+                transformsList = new List<TransformRecording>();
+                // For each object init new TransformRecording struct with transform and rotation lists
+                for (int i = 0; i < objectToRecord.Length; i++)
+                {
+                    TransformRecording tempRecord;
+                    tempRecord.positionsList = new List<Vector3>();
+                    tempRecord.rotationsList = new List<Quaternion>();
+                    transformsList.Add(tempRecord);
+                }
+            }
+        }
+
+        void LoadFileInformation()
+        {
+            transformsList = s_DataManager.Instance.ReadSWATFile(playbackFileName);
+            totalFrames = transformsList[0].positionsList.Count;
         }
 
         // Function Commands
@@ -316,7 +335,7 @@ namespace Managers
         private void OnApplicationQuit()
         {
             // Save File
-            s_DataManager.Instance.WriteSWATFile("TestOutput", transformsList);
+            s_DataManager.Instance.WriteSWATFile("TestOutput"+Random.Range(0,100), transformsList);
         }
     }
 }

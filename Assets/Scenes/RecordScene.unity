@@ -5621,6 +5621,8 @@ MonoBehaviour:
   isPingPong: 0
   playbackDirection: 0
   previousPlaybackDirection: 0
+  playbackFromFile: 0
+  playbackFileName: 
 --- !u!1 &932386636
 GameObject:
   m_ObjectHideFlags: 0
