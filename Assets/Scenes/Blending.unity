@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 121455862}
   - component: {fileID: 121455861}
   - component: {fileID: 121455860}
+  - component: {fileID: 121455863}
   m_Layer: 0
   m_Name: pose_add
   m_TagString: Untagged
@@ -213,6 +214,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 121455858}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &121455863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 121455858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d34d4384c9f2b84a92fcd4608f47744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usingQuaternionRotation: 0
+  pose0: {fileID: 0}
+  pose1: {fileID: 0}
 --- !u!1 &365307064
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,6 +601,7 @@ GameObject:
   - component: {fileID: 804650602}
   - component: {fileID: 804650601}
   - component: {fileID: 804650600}
+  - component: {fileID: 804650603}
   m_Layer: 0
   m_Name: pose_avg
   m_TagString: Untagged
@@ -666,6 +683,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 804650598}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &804650603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804650598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be74164f91b35054b9313bf087bfba3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usingQuaternionRotation: 0
+  poseList: []
+  weightList: []
 --- !u!1 &1050118508
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,6 +871,7 @@ GameObject:
   - component: {fileID: 1753933379}
   - component: {fileID: 1753933378}
   - component: {fileID: 1753933377}
+  - component: {fileID: 1753933380}
   m_Layer: 0
   m_Name: pose_scale
   m_TagString: Untagged
@@ -920,6 +953,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1753933375}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1753933380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753933375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36613092e19faf744b2eb61db630c4e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usingQuaternionRotation: 0
+  poseIdentity: {fileID: 0}
+  pose1: {fileID: 0}
+  parameter: 0
 --- !u!1 &1914154610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1025,6 +1074,7 @@ GameObject:
   - component: {fileID: 1951827300}
   - component: {fileID: 1951827299}
   - component: {fileID: 1951827298}
+  - component: {fileID: 1951827301}
   m_Layer: 0
   m_Name: pose_lerp
   m_TagString: Untagged
@@ -1106,3 +1156,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951827296}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1951827301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951827296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abb2b96d830189d43867c9b3ee472a1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usingQuaternionRotation: 0
+  pose0: {fileID: 0}
+  pose1: {fileID: 0}
+  parameter: 0
