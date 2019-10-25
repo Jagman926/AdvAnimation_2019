@@ -227,8 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usingQuaternionRotation: 0
-  pose0: {fileID: 0}
-  pose1: {fileID: 0}
+  pose0: {fileID: 1914154614}
+  pose1: {fileID: 655332358}
 --- !u!1 &365307064
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,9 +695,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be74164f91b35054b9313bf087bfba3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingQuaternionRotation: 0
-  poseList: []
-  weightList: []
+  usingQuaternionRotation: 1
+  poseIdentity: {fileID: 658886175}
+  posesList:
+  - {fileID: 1914154614}
+  - {fileID: 655332358}
+  weightsList:
+  - 0
+  - 0
 --- !u!1 &1050118508
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,8 +971,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   usingQuaternionRotation: 0
-  poseIdentity: {fileID: 0}
-  pose1: {fileID: 0}
+  poseIdentity: {fileID: 658886175}
+  pose1: {fileID: 655332358}
   parameter: 0
 --- !u!1 &1914154610
 GameObject:
@@ -1168,7 +1173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abb2b96d830189d43867c9b3ee472a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingQuaternionRotation: 0
-  pose0: {fileID: 0}
-  pose1: {fileID: 0}
+  usingQuaternionRotation: 1
+  pose0: {fileID: 1914154614}
+  pose1: {fileID: 655332358}
   parameter: 0
