@@ -970,7 +970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36613092e19faf744b2eb61db630c4e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usingQuaternionRotation: 0
+  usingQuaternionRotation: 1
   poseIdentity: {fileID: 658886175}
   pose1: {fileID: 655332358}
   parameter: 0

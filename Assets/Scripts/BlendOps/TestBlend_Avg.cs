@@ -12,24 +12,12 @@ public class TestBlend_Avg : TestBlend
     [Range(0.0f, 1.0f)]
     private List<float> weightsList = null;
 
-    // Gameobject temps for transforms
-    private List<GameObject> emptyGOs;
-    private List<Transform> poseTransforms;
+    private List<SpatialPose> poseTransforms;
 
     void Start()
     {
         // Makes sure there is a weight for every pose and vice versa
         VerifyLists();
-        // init transforms list
-        emptyGOs = new List<GameObject>();
-        poseTransforms = new List<Transform>();
-        for (int i = 0; i < posesList.Count; i++)
-        {
-            GameObject tempGO = new GameObject();
-            emptyGOs.Add(tempGO);
-            poseTransforms.Add(emptyGOs[i].transform);
-        }
-        pose_result = poseIdentity;
     }
 
     void Update()
@@ -38,7 +26,7 @@ public class TestBlend_Avg : TestBlend
         // For each pose added into pose list, lerp between identity and current pose by weight (acts as a parameter) and then save the resulting pose
         // and continue for the next pose in the list until the list is completed and all poses have been averaged in
         for (int i = 0; i < posesList.Count; i++)
-            poseTransforms[i] = Scale(poseIdentity, posesList[i], weightsList[i]);
+            poseTransforms.Add(Scale(poseIdentity, posesList[i], weightsList[i]));
 
         for (int j = 0; j < posesList.Count; j++)
             pose_result = Add(pose_result, poseTransforms[j]);
@@ -52,11 +40,9 @@ public class TestBlend_Avg : TestBlend
             Debug.LogWarning("You are missing poses for your weights in TestBlend_Avg");
     }
 
-    private Transform Scale(Transform poseIdentity, Transform pose1, float parameter)
+    private SpatialPose Scale(Transform poseIdentity, Transform pose1, float parameter)
     {
-        GameObject emptyGO = new GameObject();
-        Transform poseTransform = emptyGO.transform;
-
+        SpatialPose poseTransform = new SpatialPose();
         // Translation: lteral linear interpolation
         poseTransform.localPosition = Vector3.Lerp(poseIdentity.localPosition, pose1.localPosition, parameter);
 
@@ -72,11 +58,9 @@ public class TestBlend_Avg : TestBlend
         return poseTransform;
     }
 
-    private Transform Add(Transform pose0, Transform pose1)
+    private SpatialPose Add(Transform pose0, Transform pose1)
     {
-        GameObject emptyGO = new GameObject();
-        Transform poseTransform = emptyGO.transform;
-
+        SpatialPose poseTransform = new SpatialPose();
         // add transforms
         poseTransform.position = pose0.position + pose1.position;
         // multiplication of scales
