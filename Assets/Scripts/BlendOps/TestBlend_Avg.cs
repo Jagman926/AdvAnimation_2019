@@ -18,6 +18,7 @@ public class TestBlend_Avg : TestBlend
     {
         // Makes sure there is a weight for every pose and vice versa
         VerifyLists();
+        poseTransforms = new List<SpatialPose>();
     }
 
     void Update()
@@ -43,6 +44,7 @@ public class TestBlend_Avg : TestBlend
     private SpatialPose Scale(Transform poseIdentity, Transform pose1, float parameter)
     {
         SpatialPose poseTransform = new SpatialPose();
+
         // Translation: lteral linear interpolation
         poseTransform.localPosition = Vector3.Lerp(poseIdentity.localPosition, pose1.localPosition, parameter);
 
@@ -61,6 +63,7 @@ public class TestBlend_Avg : TestBlend
     private SpatialPose Add(Transform pose0, Transform pose1)
     {
         SpatialPose poseTransform = new SpatialPose();
+
         // add transforms
         poseTransform.position = pose0.position + pose1.position;
         // multiplication of scales
