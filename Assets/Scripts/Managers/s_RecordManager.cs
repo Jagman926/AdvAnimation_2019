@@ -20,10 +20,18 @@ namespace Managers
             public List<Quaternion> rotationsList;
         }
 
+        //[Header("Input Recordings")]
+        //public bool playbackInputFromFile;
+        //[SerializeField]
+        //private string playbackInputFileName;
+
         [Header("Object Recordings")]
         [SerializeField]
         private GameObject[] objectToRecord;
         public List<TransformRecording> transformsList;
+        public bool playbackObjectsFromFile;
+        [SerializeField]
+        private string playbackObjectsFileName;
 
         [Header("Record Variables")]
         public bool record;
@@ -40,11 +48,6 @@ namespace Managers
         public bool isPingPong;
         public PB_Direction playbackDirection;
         public PB_Direction previousPlaybackDirection;
-
-        [Header("Playback File")]
-        public bool playbackFromFile;
-        [SerializeField]
-        private string playbackFileName;
 
         void Start()
         {
@@ -223,9 +226,9 @@ namespace Managers
             // Get all objects with "Record" tag
             objectToRecord = GameObject.FindGameObjectsWithTag("Record");
             // Check if playback is from file
-            if (playbackFromFile)
+            if (playbackObjectsFromFile)
             {
-                LoadFileInformation();
+                LoadObjectFileInformation();
             }
             // If not, init List
             else
@@ -242,9 +245,9 @@ namespace Managers
             }
         }
 
-        void LoadFileInformation()
+        void LoadObjectFileInformation()
         {
-            transformsList = s_DataManager.Instance.ReadSWATFile(playbackFileName);
+            transformsList = s_DataManager.Instance.ReadSWATFile(playbackObjectsFileName);
             totalFrames = transformsList[0].positionsList.Count;
         }
 
@@ -335,7 +338,7 @@ namespace Managers
         private void OnApplicationQuit()
         {
             // Save File
-            s_DataManager.Instance.WriteSWATFile("TestOutput"+Random.Range(0,100), transformsList);
+            s_DataManager.Instance.WriteSWATFile("TestOutput" + Random.Range(0, 100), transformsList);
         }
     }
 }
