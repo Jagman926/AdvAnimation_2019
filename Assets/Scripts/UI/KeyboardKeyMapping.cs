@@ -14,7 +14,8 @@ public class KeyboardKeyMapping : MonoBehaviour
     GameObject keyboardObject;
     [SerializeField]
     List<GameObject> KeyObjectList;
-    List<KeyCode> KeyCodeList;
+    [HideInInspector]
+    public List<KeyCode> KeyCodeList;
 
     // Keycode/Keylist pair
     List<(KeyCode, GameObject)> KeyCodeObjectPair;
@@ -24,13 +25,12 @@ public class KeyboardKeyMapping : MonoBehaviour
         // Init Input Manager
         IM = Managers.s_InputManager.Instance;
         KeyCodeList = new List<KeyCode>();
+        InitListeners();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         // Init Key List
-        InitListeners();
         InitKeyboard();
     }
 
@@ -165,10 +165,9 @@ public class KeyboardKeyMapping : MonoBehaviour
         KeyCodeList.Add(KeyCode.Y);
         KeyCodeList.Add(KeyCode.Z);
 
-        // Start listener in Input Manager
-        foreach (KeyCode key in KeyCodeList)
+        for(int i = 0; i < KeyCodeList.Count; i++)
         {
-            IM.StartInputListen(key);
+            IM.StartInputListen(KeyCodeList[i]);
         }
     }
 }

@@ -20,10 +20,22 @@ namespace Managers
             public List<Quaternion> rotationsList;
         }
 
-        //[Header("Input Recordings")]
-        //public bool playbackInputFromFile;
-        //[SerializeField]
-        //private string playbackInputFileName;
+        [SerializeField]
+        public struct InputRecording
+        {
+            public KeyCode key;
+            public List<bool> isDownList;
+        }
+
+        // Input Manager
+        s_InputManager IM;
+
+        [Header("Input Recordings")]
+        [SerializeField]
+        private KeyCode[] keysToRecord;
+        [SerializeField]
+        KeyboardKeyMapping keyboardKeyMapping;
+        public List<InputRecording> keyInputList;
 
         [Header("Object Recordings")]
         [SerializeField]
@@ -51,6 +63,8 @@ namespace Managers
 
         void Start()
         {
+            // Input Manager instace
+            IM = s_InputManager.Instance;
             // Init starting variables
             currentFrame = 0;
             totalFrames = 0;
@@ -67,6 +81,7 @@ namespace Managers
             // If recording
             if (record)
             {
+                // Update input from input manager
                 // Update current frame
                 UpdateCurrentFrame_Record();
                 // Update keyframe time
@@ -120,6 +135,11 @@ namespace Managers
                 transformsList[i].positionsList.Add(objectToRecord[i].transform.position);
                 transformsList[i].rotationsList.Add(objectToRecord[i].transform.rotation);
             }
+            // For each key being recorded, save current key and bool in list
+            for (int j = 0; j < keysToRecord.Length; j++)
+            {
+                keyInputList[j].isDownList.Add(IM.GetKey(keysToRecord[j]));
+            }
         }
 
         void InitPlayback()
@@ -136,6 +156,8 @@ namespace Managers
                 currentFrame = totalFrames;
             // Set in playback
             inPlayback = true;
+            // Set input update
+            IM.updateInput = false;
         }
 
         void PlaybackFrames()
@@ -150,6 +172,8 @@ namespace Managers
                     // Playback is done
                     inPlayback = false;
                     playback = false;
+                    // Set input update
+                    IM.updateInput = true;
                 }
                 // If set to loop
                 else if (isLooping)
@@ -208,6 +232,10 @@ namespace Managers
                 objectToRecord[i].transform.position = transformsList[i].positionsList[currentFrame];
                 objectToRecord[i].transform.rotation = transformsList[i].rotationsList[currentFrame];
             }
+            for (int j = 0; j < keysToRecord.Length; j++)
+            {
+                IM.SetKey(keyInputList[j].key, keyInputList[j].isDownList[currentFrame]);
+            }
         }
 
         void FreezeAllObjects(bool freeze)
@@ -241,6 +269,19 @@ namespace Managers
                     tempRecord.positionsList = new List<Vector3>();
                     tempRecord.rotationsList = new List<Quaternion>();
                     transformsList.Add(tempRecord);
+                }
+
+                if (keyboardKeyMapping != null)
+                    keysToRecord = keyboardKeyMapping.KeyCodeList.ToArray();
+                // Init KeyInputList
+                keyInputList = new List<InputRecording>();
+                // For each key init new InputRecording struct with key and isDown lists
+                for (int j = 0; j < keysToRecord.Length; j++)
+                {
+                    InputRecording inputRecording;
+                    inputRecording.key = keysToRecord[j];
+                    inputRecording.isDownList = new List<bool>();
+                    keyInputList.Add(inputRecording);
                 }
             }
         }
@@ -335,11 +376,13 @@ namespace Managers
             currentFrame = 0;
         }
 
+        /*
         private void OnApplicationQuit()
         {
-            if(transformsList.Count > 0)
+            if (transformsList.Count > 0)
                 // Save File
                 s_DataManager.Instance.WriteSWATFile("TestOutput" + Random.Range(0, 100), transformsList);
         }
+        */
     }
 }

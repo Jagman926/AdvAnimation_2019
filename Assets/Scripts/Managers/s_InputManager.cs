@@ -57,6 +57,9 @@ namespace Managers
         AxisInput[] inputGetAxis;
         KeyInput[] inputGetKey;
 
+        // Update input
+        public bool updateInput;
+
         void Awake()
         {
             InitInputList();
@@ -67,12 +70,16 @@ namespace Managers
         {
             inputGetAxis = axisListeners.ToArray();
             inputGetKey = keyListeners.ToArray();
+            updateInput = true;
         }
 
         void Update()
         {
-            UpdateKeyFromInput();
-            UpdateAxisFromInput();
+            if (updateInput)
+            {
+                UpdateKeyFromInput();
+                UpdateAxisFromInput();
+            }
         }
 
         // Init 
@@ -133,16 +140,57 @@ namespace Managers
         public bool GetKey(KeyCode key)
         {
             // Loop through list of listeners until keycode is found
-            for(int i = 0; i < inputGetKey.Length; i++)
+            for (int i = 0; i < inputGetKey.Length; i++)
             {
                 // When found, return it's down state
-                if(inputGetKey[i].key == key)
+                if (inputGetKey[i].key == key)
                     return inputGetKey[i].isDown;
             }
             // If not found, throw error and return false
             Debug.LogError("Keycode " + key.ToString() + " is not being tracked in s_InputManager. " +
                             "Add a listener for the Keycode using StartInputListen() in s_InputManager");
             return false;
+        }
+
+        public void SetKey(KeyCode key, bool value)
+        {
+            bool done = false;
+            // Loop through list of listeners until keycode is found
+            for (int i = 0; i < inputGetKey.Length; i++)
+            {
+                // When found, return it's down state
+                if (inputGetKey[i].key == key)
+                {
+                    inputGetKey[i].isDown = value;
+                    done = true;
+                }
+            }
+            if (!done)
+            {
+                // If not found, throw error and return false
+                Debug.LogError("KeyCode " + key.ToString() + " is not being tracked in s_InputManager. " +
+                                "Add a listener for the Keycode using StartInputListen() in s_InputManager");
+            }
+        }
+
+        public void SetKeyAtIndex(int i, bool value)
+        {
+            inputGetKey[i].isDown = value;
+        }
+
+        public KeyInput[] GetKeyArray()
+        {
+            return inputGetKey;
+        }
+
+        public KeyInput GetKeyAtIndex(int i)
+        {
+            return inputGetKey[i];
+        }
+
+        public int GetKeyArrayLength()
+        {
+            return inputGetKey.Length;
         }
     }
 }
