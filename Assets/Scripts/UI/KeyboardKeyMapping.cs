@@ -25,6 +25,7 @@ public class KeyboardKeyMapping : MonoBehaviour
         // Init Input Manager
         IM = Managers.s_InputManager.Instance;
         KeyCodeList = new List<KeyCode>();
+        IM.InitLists();
         InitListeners();
     }
 

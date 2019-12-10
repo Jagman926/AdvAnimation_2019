@@ -60,12 +60,6 @@ namespace Managers
         // Update input
         public bool updateInput;
 
-        void Awake()
-        {
-            InitInputList();
-            InitAxisList();
-        }
-
         void Start()
         {
             inputGetAxis = axisListeners.ToArray();
@@ -84,6 +78,12 @@ namespace Managers
 
         // Init 
         //*----------------------------------------------------*/
+
+        public void InitLists()
+        {
+            InitInputList();
+            InitAxisList();
+        }
 
         void InitInputList()
         {

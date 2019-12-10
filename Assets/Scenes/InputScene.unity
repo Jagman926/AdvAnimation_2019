@@ -1358,6 +1358,7 @@ MonoBehaviour:
   - {fileID: 728598974}
   - {fileID: 1306768654}
   - {fileID: 1391620922}
+  KeyCodeList: 
 --- !u!4 &1743294987 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: ddaa3a1325ea0ca4aac1bd1549561c26,
@@ -1413,6 +1414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e4ac3b10ccda8b4c9136c08fff35ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateInput: 0
 --- !u!4 &1769452944
 Transform:
   m_ObjectHideFlags: 0
