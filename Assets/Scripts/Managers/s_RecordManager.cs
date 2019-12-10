@@ -337,8 +337,9 @@ namespace Managers
 
         private void OnApplicationQuit()
         {
-            // Save File
-            s_DataManager.Instance.WriteSWATFile("TestOutput" + Random.Range(0, 100), transformsList);
+            if(transformsList.Count > 0)
+                // Save File
+                s_DataManager.Instance.WriteSWATFile("TestOutput" + Random.Range(0, 100), transformsList);
         }
     }
 }

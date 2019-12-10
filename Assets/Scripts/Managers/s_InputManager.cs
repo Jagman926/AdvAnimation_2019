@@ -51,8 +51,11 @@ namespace Managers
         }
 
         // input lists ~Listeners
-        List<AxisInput> inputGetAxis;
-        List<KeyInput> inputGetKey;
+        List<AxisInput> axisListeners;
+        List<KeyInput> keyListeners;
+
+        AxisInput[] inputGetAxis;
+        KeyInput[] inputGetKey;
 
         void Awake()
         {
@@ -62,12 +65,8 @@ namespace Managers
 
         void Start()
         {
-            StartAxisListen("Horizontal");
-            StartAxisListen("Vertical");
-            StartInputListen(KeyCode.Q);
-            StartInputListen(KeyCode.W);
-            StartInputListen(KeyCode.E);
-            StartInputListen(KeyCode.R);
+            inputGetAxis = axisListeners.ToArray();
+            inputGetKey = keyListeners.ToArray();
         }
 
         void Update()
@@ -81,20 +80,20 @@ namespace Managers
 
         void InitInputList()
         {
-            inputGetKey = new List<KeyInput>();
+            keyListeners = new List<KeyInput>();
         }
 
         void InitAxisList()
         {
-            inputGetAxis = new List<AxisInput>();
+            axisListeners = new List<AxisInput>();
         }
 
-        void StartInputListen(KeyCode keyCode)
+        public void StartInputListen(KeyCode keyCode)
         {
             // Init new KeyInput
             KeyInput key = new KeyInput(keyCode);
             // Add to listener
-            inputGetKey.Add(key);
+            keyListeners.Add(key);
         }
 
         void StartAxisListen(string axisName)
@@ -102,7 +101,7 @@ namespace Managers
             // Init new AxisInput
             AxisInput axis = new AxisInput(axisName);
             // Add to listener
-            inputGetAxis.Add(axis);
+            axisListeners.Add(axis);
         }
 
         // Updates
@@ -111,7 +110,7 @@ namespace Managers
         void UpdateKeyFromInput()
         {
             // For each key being tracked
-            for (int i = 0; i < inputGetKey.Count; i++)
+            for (int i = 0; i < inputGetKey.Length; i++)
             {
                 // Update the GetKey bool
                 inputGetKey[i].SetKey(Input.GetKey(inputGetKey[i].key));
@@ -121,11 +120,29 @@ namespace Managers
         void UpdateAxisFromInput()
         {
             // For each axis being tracked
-            for (int i = 0; i < inputGetAxis.Count; i++)
+            for (int i = 0; i < inputGetAxis.Length; i++)
             {
                 // Update the GetKey bool
                 inputGetAxis[i].SetValue(Input.GetAxisRaw(inputGetAxis[i].axis));
             }
+        }
+
+        // Getters/Setters
+        //*----------------------------------------------------*/
+
+        public bool GetKey(KeyCode key)
+        {
+            // Loop through list of listeners until keycode is found
+            for(int i = 0; i < inputGetKey.Length; i++)
+            {
+                // When found, return it's down state
+                if(inputGetKey[i].key == key)
+                    return inputGetKey[i].isDown;
+            }
+            // If not found, throw error and return false
+            Debug.LogError("Keycode " + key.ToString() + " is not being tracked in s_InputManager. " +
+                            "Add a listener for the Keycode using StartInputListen() in s_InputManager");
+            return false;
         }
     }
 }
