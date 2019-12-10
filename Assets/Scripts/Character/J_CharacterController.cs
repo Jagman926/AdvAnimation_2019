@@ -33,6 +33,8 @@ public class J_CharacterController : MonoBehaviour
     private float accelerationSpeed = 0.0f;
     [SerializeField]
     private float targetVelocitySpeed = 0.0f;
+    [SerializeField]
+    private float velocityPerTick = 0.0f;
 
     // DeadZones
     private float joystickDeadzone = 0.0f;
@@ -88,7 +90,7 @@ public class J_CharacterController : MonoBehaviour
         // Vertical
         if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
             rb.position = new Vector3(rb.position.x, rb.position.y, rb.position.z + positionSpeed);
-        else if(IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow))
+        else if (IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow)) // Back Input
             rb.position = new Vector3(rb.position.x, rb.position.y, rb.position.z - positionSpeed);
 
     }
@@ -97,14 +99,14 @@ public class J_CharacterController : MonoBehaviour
     {
         // Horizontal
         if (IM.GetKey(KeyCode.D) || IM.GetKey(KeyCode.RightArrow)) // Right Input
-            rb.velocity = new Vector3(positionSpeed, rb.velocity.y, rb.velocity.z);
+            rb.velocity = new Vector3(velocitySpeed, rb.velocity.y, rb.velocity.z);
         else if (IM.GetKey(KeyCode.A) || IM.GetKey(KeyCode.LeftArrow)) // Left Input
             rb.velocity = new Vector3(-velocitySpeed, rb.velocity.y, rb.velocity.z);
 
         // Vertical
         if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, velocitySpeed);
-        else if(IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow))
+        else if (IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow)) // Back Input
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, -velocitySpeed);
     }
 
@@ -119,13 +121,56 @@ public class J_CharacterController : MonoBehaviour
         // Vertical
         if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
             rb.AddForce(Vector3.forward * accelerationSpeed, ForceMode.Acceleration);
-        else if(IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow))
+        else if (IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow)) // Back Input
             rb.AddForce(Vector3.back * accelerationSpeed, ForceMode.Acceleration);
     }
 
     void UpdateMovement_TargetVelocity_Lerp()
     {
+        // Horizontal
+        if (IM.GetKey(KeyCode.D) || IM.GetKey(KeyCode.RightArrow)) // Right Input
+        {
+            if (rb.velocity.x < targetVelocitySpeed)
+                rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x + velocityPerTick, -targetVelocitySpeed, targetVelocitySpeed), rb.velocity.y, rb.velocity.z);
+        }
+        else if (IM.GetKey(KeyCode.A) || IM.GetKey(KeyCode.LeftArrow)) // Left Input
+        {
+            if (rb.velocity.x > -targetVelocitySpeed)
+                rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x - velocityPerTick, -targetVelocitySpeed, targetVelocitySpeed), rb.velocity.y, rb.velocity.z);
+        }
+        else
+        {
+            if (rb.velocity.x != 0.0f)
+            {
+                if (rb.velocity.x > 0)
+                    rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x - velocityPerTick, 0.0f, targetVelocitySpeed), rb.velocity.y, rb.velocity.z);
+                else if (rb.velocity.x < 0)
+                    rb.velocity = new Vector3(Mathf.Clamp(rb.velocity.x + velocityPerTick, -targetVelocitySpeed, 0.0f), rb.velocity.y, rb.velocity.z);
+            }
+        }
 
+
+        // Vertical
+        if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
+        {
+            if (rb.velocity.z < targetVelocitySpeed)
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z + velocityPerTick, -targetVelocitySpeed, targetVelocitySpeed));
+        }
+        else if (IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow)) // Back Input
+        {
+            if (rb.velocity.z > -targetVelocitySpeed)
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z - velocityPerTick, -targetVelocitySpeed, targetVelocitySpeed));
+        }
+        else
+        {
+            if (rb.velocity.z != 0.0f)
+            {
+                if (rb.velocity.z > 0)
+                    rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z - velocityPerTick, 0.0f, targetVelocitySpeed));
+                else if (rb.velocity.z < 0)
+                    rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, Mathf.Clamp(rb.velocity.z + velocityPerTick, -targetVelocitySpeed, 0.0f));
+            }
+        }
     }
 
     // Input
