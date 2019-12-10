@@ -18,6 +18,9 @@ public class J_CharacterController : MonoBehaviour
     [SerializeField]
     private ControlMode currentControlMode = ControlMode.NONE;
 
+    // Input Manager
+    Managers.s_InputManager IM;
+
     // Rigidbody
     Rigidbody rb = null;
 
@@ -38,6 +41,8 @@ public class J_CharacterController : MonoBehaviour
     {
         // Set Rigidbody
         rb = this.GetComponent<Rigidbody>();
+        // Init Input Manager
+        IM = Managers.s_InputManager.Instance;
     }
 
     void Update()
@@ -75,15 +80,15 @@ public class J_CharacterController : MonoBehaviour
     void UpdateMovement_Position()
     {
         // Horizontal
-        if (GetHorizontalInput() > 0.0f) // Right Input
+        if (IM.GetKey(KeyCode.D) || IM.GetKey(KeyCode.RightArrow)) // Right Input
             rb.position = new Vector3(rb.position.x + positionSpeed, rb.position.y, rb.position.z);
-        else if (GetHorizontalInput() < 0.0f) // Left Input
+        else if (IM.GetKey(KeyCode.A) || IM.GetKey(KeyCode.LeftArrow)) // Left Input
             rb.position = new Vector3(rb.position.x - positionSpeed, rb.position.y, rb.position.z);
 
         // Vertical
-        if (GetVerticalInput() > 0.0f) // Forward Input
+        if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
             rb.position = new Vector3(rb.position.x, rb.position.y, rb.position.z + positionSpeed);
-        else if(GetVerticalInput() < 0.0f)
+        else if(IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow))
             rb.position = new Vector3(rb.position.x, rb.position.y, rb.position.z - positionSpeed);
 
     }
@@ -91,30 +96,30 @@ public class J_CharacterController : MonoBehaviour
     void UpdateMovement_Velocity()
     {
         // Horizontal
-        if (GetHorizontalInput() > 0.0f) // Right Input
+        if (IM.GetKey(KeyCode.D) || IM.GetKey(KeyCode.RightArrow)) // Right Input
             rb.velocity = new Vector3(positionSpeed, rb.velocity.y, rb.velocity.z);
-        else if (GetHorizontalInput() < 0.0f) // Left Input
+        else if (IM.GetKey(KeyCode.A) || IM.GetKey(KeyCode.LeftArrow)) // Left Input
             rb.velocity = new Vector3(-velocitySpeed, rb.velocity.y, rb.velocity.z);
 
         // Vertical
-        if (GetVerticalInput() > 0.0f) // Forward Input
+        if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, velocitySpeed);
-        else if(GetVerticalInput() < 0.0f)
+        else if(IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow))
             rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, -velocitySpeed);
     }
 
     void UpdateMovement_Acceleration()
     {
         // Horizontal
-        if (GetHorizontalInput() > 0.0f) // Right Input
+        if (IM.GetKey(KeyCode.D) || IM.GetKey(KeyCode.RightArrow)) // Right Input
             rb.AddForce(Vector3.right * accelerationSpeed, ForceMode.Acceleration);
-        else if (GetHorizontalInput() < 0.0f) // Left Input
+        else if (IM.GetKey(KeyCode.A) || IM.GetKey(KeyCode.LeftArrow)) // Left Input
             rb.AddForce(Vector3.left * accelerationSpeed, ForceMode.Acceleration);
 
         // Vertical
-        if (GetVerticalInput() > 0.0f) // Forward Input
+        if (IM.GetKey(KeyCode.W) || IM.GetKey(KeyCode.UpArrow)) // Forward Input
             rb.AddForce(Vector3.forward * accelerationSpeed, ForceMode.Acceleration);
-        else if(GetVerticalInput() < 0.0f)
+        else if(IM.GetKey(KeyCode.S) || IM.GetKey(KeyCode.DownArrow))
             rb.AddForce(Vector3.back * accelerationSpeed, ForceMode.Acceleration);
     }
 
